@@ -39,12 +39,14 @@ project "Test"
 	language    "C++"
 	kind        "ConsoleApp"
 	flags       { "ExtraWarnings", "StaticRuntime" }
+	defines		{ "DUKBIND_TEST" }
 
 	includedirs { "Catch/include", "duktape/src", "include", "src", "tests" }
 
 	files
 	{
-		"tests/main.cpp",
+		"tests/**.cpp",
+		"src/**.cpp",
 		"duktape/src/*.c"
 	}
 
