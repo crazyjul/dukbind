@@ -1,0 +1,6 @@
+[submodule "Catch"]
+	path = Catch
+	url = git@github.com:philsquared/Catch.git
+[submodule "duktape-releases"]
+	path = duktape
+	url = git@github.com:svaarala/duktape-releases.git
