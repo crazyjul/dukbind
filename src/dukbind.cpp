@@ -1,6 +1,7 @@
 #include <duktape.h>
 #include "dukbind.h"
 #include "dukbindconf.h"
+#include "dukbind_proxy_function.h"
 
 namespace dukbind
 {
@@ -75,5 +76,50 @@ namespace dukbind
         dukbind_assert( duk_is_number( ctx, index ), "No conversion is allowed in Get methods" );
 
         return duk_to_number( ctx, index );
+    }
+
+    void Setup( duk_context * ctx, const char * module )
+    {
+        if( module )
+        {
+            duk_push_global_object( ctx );
+            duk_get_prop_string( ctx, -1, "Proxy" );
+            duk_push_object( ctx );
+            duk_push_object( ctx );
+
+            duk_push_c_function( ctx, internal::BindingGet, 2 );
+            duk_put_prop_string( ctx, -2, "get" );
+
+            duk_push_c_function( ctx, internal::BindingHas, 1 );
+            duk_put_prop_string( ctx, -2, "has" );
+
+            duk_push_c_function( ctx, internal::BindingSet, 3 );
+            duk_put_prop_string( ctx, -2, "set" );
+
+            duk_push_c_function( ctx, internal::BindingDelete, 1 );
+            duk_put_prop_string( ctx, -2, "deleteProperty" );
+        }
+        else
+        {
+
+            duk_push_global_object( ctx );
+
+            duk_get_prop_string( ctx, -1, "Proxy" );
+
+            duk_dup( ctx, -2 );
+            duk_push_object( ctx );
+
+            duk_push_c_function( ctx, internal::GlobalsGet, 2 );
+            duk_put_prop_string( ctx, -2, "get" );
+
+            duk_push_c_function( ctx, internal::GlobalsHas, 1 );
+            duk_put_prop_string( ctx, -2, "has" );
+
+            duk_new( ctx, 2 );
+            duk_set_global_object( ctx );
+
+            duk_pop( ctx );
+
+        }
     }
 }
