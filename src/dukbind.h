@@ -4,6 +4,8 @@
     #error Duktape.h should be included before this header
 #endif
 
+#include "dukbindconf.h"
+
 namespace dukbind
 {
 
@@ -21,4 +23,10 @@ namespace dukbind
     void Push( duk_context * ctx, const int value );
     void Push( duk_context * ctx, const float value );
     void Push( duk_context * ctx, const double value );
+
+
+    const char * Get( duk_context * ctx, const int index, const char ** );
+    int Get( duk_context * ctx, const int index, const int * );
+    float Get( duk_context * ctx, const int index, const float * );
+    double Get( duk_context * ctx, const int index, const double * );
 }
