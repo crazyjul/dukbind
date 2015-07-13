@@ -3,7 +3,7 @@
 #include <dukbind.h>
 #include <limits>
 
-TEST_CASE( "When binding is registered, globals are still acessible", "[binding][globals]" )
+TEST_CASE( "When binding is registered, globals are still accessible", "[binding][globals]" )
 {
     duk_context * ctx = duk_create_heap_default();
     const char * value = "Hello world";
