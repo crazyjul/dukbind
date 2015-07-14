@@ -15,7 +15,7 @@ static duk_ret_t dummy_function2( duk_context * )
 
 TEST_CASE( "Bindings handle function correctly ", "[bindings][functions]" )
 {
-    dukbind::internal::BindingInfo info;
+    dukbind::BindingInfo info;
 
     SECTION( "Adding function with empty name asserts" )
     {
