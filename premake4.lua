@@ -41,13 +41,13 @@ project "Test"
 	flags       { "ExtraWarnings", "StaticRuntime" }
 	defines		{ "DUKBIND_TEST" }
 
-	includedirs { "Catch/include", "duktape/src", "include", "src", "tests" }
+	includedirs { "Catch/include", "duktape/src-separate", "include", "src", "tests" }
 
 	files
 	{
 		"tests/**.cpp",
 		"src/**.cpp",
-		"duktape/src/*.c"
+		"duktape/src-separate/*.c"
 	}
 
 	configuration "Debug"
