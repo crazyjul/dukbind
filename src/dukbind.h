@@ -17,7 +17,7 @@ namespace dukbind
         // :TODO: Improve
         #define dukbind_assert( _condition_, _message_ ) { if( !( _condition_ ) ){ assert( false ); } }
     #else
-        #define dukbind_assert( _condition_, _message ) { sizeof(_condition_) }
+        #define dukbind_assert( _condition_, _message ) { sizeof(_condition_); }
     #endif
 
     void Push( duk_context * ctx, const char * value );
