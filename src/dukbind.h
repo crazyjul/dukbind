@@ -5,6 +5,7 @@
 #endif
 
 #include "dukbindconf.h"
+#include "dukbind_binding_info.h"
 
 namespace dukbind
 {
@@ -41,5 +42,6 @@ namespace dukbind
     // resolves the binding. It is expected to have a performance impact by adding a level of indirection.
     // Inserting the binding into an object can also be used to have the same javascript interface that embind in emscripten
 
-    void Setup( duk_context * ctx, const char * module = 0 );
+    void Setup( duk_context * ctx, const BindingInfo & info, const char * module = 0 );
+
 }

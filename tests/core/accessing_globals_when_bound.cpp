@@ -3,6 +3,11 @@
 #include <dukbind.h>
 #include <limits>
 
+static duk_ret_t dummy_function( duk_context * )
+{
+    return 0;
+}
+
 TEST_CASE( "When binding is registered, globals are still accessible", "[binding][globals]" )
 {
     duk_context * ctx = duk_create_heap_default();
@@ -15,7 +20,11 @@ TEST_CASE( "When binding is registered, globals are still accessible", "[binding
     duk_push_int( ctx, 2 );
     duk_put_prop_string( ctx, -2, "Int" );
 
-    dukbind::Setup( ctx );
+    dukbind::BindingInfo info;
+
+    info.AddFunction( "FunctionName", dummy_function );
+
+    dukbind::Setup( ctx, info );
 
     SECTION( "Setup does not prevent accessing globals" )
     {
@@ -43,6 +52,19 @@ TEST_CASE( "When binding is registered, globals are still accessible", "[binding
 
         duk_get_prop_string( ctx, -1, "Text" );
         CHECK( strcmp( duk_to_string( ctx, -1 ), "Another world" ) == 0 );
+    }
+
+    SECTION( "Binding does not hide global variables" )
+    {
+        duk_push_global_object( ctx );
+        duk_push_string( ctx, "Value" );
+        duk_put_prop_string( ctx, -2, "FunctionName" );
+        duk_pop( ctx );
+
+        duk_get_prop_string( ctx, -1, "FunctionName" );
+
+        CHECK( duk_is_string( ctx, -1 ) );
+        CHECK( strcmp( duk_to_string( ctx, -1 ), "Value" ) == 0 );
     }
 
     duk_destroy_heap( ctx );

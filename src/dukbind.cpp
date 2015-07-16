@@ -2,6 +2,8 @@
 #include "dukbind.h"
 #include "dukbindconf.h"
 #include "dukbind_proxy_function.h"
+#include "dukbind_private.h"
+#include "utils/dukbind_debug.h"
 
 namespace dukbind
 {
@@ -78,8 +80,16 @@ namespace dukbind
         return duk_to_number( ctx, index );
     }
 
-    void Setup( duk_context * ctx, const char * module )
+    void Setup( duk_context * ctx, const BindingInfo & info, const char * module )
     {
+        debug::StackMonitor monitor( ctx );
+        duk_push_global_stash( ctx );
+        void * info_buffer = duk_push_fixed_buffer( ctx, sizeof( BindingInfo * ) );
+        *reinterpret_cast<const BindingInfo**>( info_buffer ) = &info; // :TODO: Ref count
+
+        duk_put_prop_string( ctx, -2, DUKBIND_BINDING_NAME );
+        duk_pop( ctx );
+
         if( module )
         {
             duk_push_global_object( ctx );
