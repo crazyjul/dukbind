@@ -108,6 +108,10 @@ namespace dukbind
 
             duk_push_c_function( ctx, internal::BindingDelete, 1 );
             duk_put_prop_string( ctx, -2, "deleteProperty" );
+            duk_new( ctx, 2 );
+
+            duk_put_prop_string( ctx, -2, module );
+            duk_pop( ctx );
         }
         else
         {
