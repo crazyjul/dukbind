@@ -54,7 +54,7 @@ namespace dukbind
         duk_ret_t BindingGet( duk_context * ctx )
         {
             BindingInfo * info = GetBinding( ctx );
-            const char * name = duk_require_string( ctx, 2 );
+            const char * name = duk_require_string( ctx, 1 );
 
             dukbind_assert( info, "No binding info" );
 
