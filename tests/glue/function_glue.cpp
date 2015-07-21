@@ -3,6 +3,12 @@
 #include <dukbind.h>
 #include <dukbind_glue.h>
 
+static bool Called = false;
+static void Call()
+{
+    Called = true;
+}
+
 static float GetFloat()
 {
     return 1.234f;
@@ -43,6 +49,20 @@ TEST_CASE( "Glue functions are working", "[binding][glue]" )
     duk_context * ctx = duk_create_heap_default();
 
     dukbind::BindingInfo info;
+
+    SECTION( "Void function" )
+    {
+        info.AddFunction(
+            "Call",
+            &dukbind::glue::function_glue<decltype(&Call)>::function<&Call>
+            );
+
+        dukbind::Setup( ctx, info, "Module" );
+        Called = false;
+        duk_eval_string_noresult( ctx, "Module.Call()" );
+
+        REQUIRE( Called );
+    }
 
     SECTION( "Result functions" )
     {
