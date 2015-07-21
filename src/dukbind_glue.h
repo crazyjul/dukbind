@@ -27,7 +27,7 @@ namespace dukbind
             static duk_ret_t function( duk_context * ctx )
             {
                 _Function_();
-                return 1;
+                return 0;
             }
         };
 
@@ -55,7 +55,7 @@ namespace dukbind
                 _Function_(
                     Get( ctx, 0, (typename std::remove_reference<_Arg0>::type *)0 )
                     );
-                return 1;
+                return 0;
             }
         };
 
@@ -85,7 +85,7 @@ namespace dukbind
                     Get( ctx, 0, (typename std::remove_reference<_Arg0>::type *)0 ),
                     Get( ctx, 1, (typename std::remove_reference<_Arg1>::type *)0 )
                     );
-                return 1;
+                return 0;
             }
         };
 
@@ -117,7 +117,7 @@ namespace dukbind
                     Get( ctx, 1, (typename std::remove_reference<_Arg1>::type *)0 ),
                     Get( ctx, 2, (typename std::remove_reference<_Arg2>::type *)0 )
                     );
-                return 1;
+                return 0;
             }
         };
 
@@ -151,7 +151,7 @@ namespace dukbind
                     Get( ctx, 2, (typename std::remove_reference<_Arg2>::type *)0 ),
                     Get( ctx, 3, (typename std::remove_reference<_Arg3>::type *)0 )
                     );
-                return 1;
+                return 0;
             }
         };
     }
