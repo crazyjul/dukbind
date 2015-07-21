@@ -35,6 +35,19 @@ namespace dukbind
             }
         };
 
+        template<typename _Arg0 >
+        struct function_glue<void (*)( _Arg0 )>
+        {
+            template<void (*_Function_)( _Arg0 )>
+            static duk_ret_t function( duk_context * ctx )
+            {
+                _Function_(
+                    Get( ctx, 0, (typename std::remove_reference<_Arg0>::type *)0 )
+                    );
+                return 1;
+            }
+        };
+
         template<typename _Result_, typename _Arg0, typename _Arg1 >
         struct function_glue<_Result_ (*)( _Arg0, _Arg1 )>
         {

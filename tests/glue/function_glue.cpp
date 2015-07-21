@@ -18,6 +18,21 @@ static const char * GetText()
     return "Hello world";
 }
 
+static void SetText( const char * value )
+{
+    REQUIRE( strcmp( value, "Hello world" ) == 0 );
+}
+
+static void SetFloat( float value )
+{
+    REQUIRE( value == 1.25f );
+}
+
+static void SetInt( const int & value )
+{
+    REQUIRE( value == 1234 );
+}
+
 static float GetMinimum( float a, const float & b )
 {
     return ( a > b ) ? b : a;
@@ -29,7 +44,7 @@ TEST_CASE( "Glue functions are working", "[binding][glue]" )
 
     dukbind::BindingInfo info;
 
-    SECTION( "Result functions")
+    SECTION( "Result functions" )
     {
         info.AddFunction(
             "GetFloat",
@@ -65,7 +80,27 @@ TEST_CASE( "Glue functions are working", "[binding][glue]" )
         duk_pop( ctx );
     }
 
-    SECTION( "Module access to globals")
+    SECTION( "Void functions with 1 arg" )
+    {
+        info.AddFunction(
+            "SetFloat",
+            &dukbind::glue::function_glue<decltype(&SetFloat)>::function<&SetFloat>
+            );
+        info.AddFunction(
+            "SetInt",
+            &dukbind::glue::function_glue<decltype(&SetInt)>::function<&SetInt>
+            );
+
+        info.AddFunction(
+            "SetText",
+            &dukbind::glue::function_glue<decltype(&SetText)>::function<&SetText>
+            );
+
+        dukbind::Setup( ctx, info, "Module" );
+        duk_eval_string_noresult( ctx, "Module.SetFloat(1.25); Module.SetInt(1234); Module.SetText('Hello world')" );
+    }
+
+    SECTION( "Result function with 2 arguments")
     {
         info.AddFunction(
             "GetMinimum",
