@@ -54,3 +54,26 @@ TEST_CASE( "Bindings handle class correctly ", "[bindings][class]" )
         REQUIRE_THROWS( info.AddMethod( 1234, "Some+Method", &dummy ) );
     }
 }
+
+TEST_CASE( "Querying class methods works", "[bindings][class]" )
+{
+    dukbind::BindingInfo info;
+    info.AddClass( "A", 1234 );
+    info.AddMethod( 1234, "SomeMethod", &dummy );
+
+    SECTION( "Recover correct function" )
+    {
+        REQUIRE( info.GetClassMethod( 1234, "SomeMethod" ) == &dummy );
+    }
+
+    SECTION( "Does not crash when class id is wrong" )
+    {
+        REQUIRE( info.GetClassMethod( 5678, "SomeMethod" ) == 0 );
+    }
+
+    SECTION( "Does not crash when function name is wrong" )
+    {
+        REQUIRE( info.GetClassMethod( 1234, "SomeMethod2" ) == 0 );
+    }
+
+}

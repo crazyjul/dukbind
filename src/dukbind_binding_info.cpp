@@ -93,4 +93,30 @@ namespace dukbind
         auto result = ( *function_table ).second.insert( std::make_pair( Identifier( method_name ), method ) );
         dukbind_assert( result.second, "Method already exists" );
     }
+
+    duk_c_function BindingInfo::GetClassMethod(
+        const size_t class_identifier,
+        const char * method_name
+        ) const
+    {
+        auto function_table = Data->ClassMethodTable.find( class_identifier );
+
+        if( function_table == Data->ClassMethodTable.end() )
+        {
+            return 0;
+        }
+
+        auto result = ( *function_table ).second.find( Identifier( method_name ) );
+
+        if( result != ( *function_table ).second.end() )
+        {
+            return ( *result ).second;
+        }
+        else
+        {
+            return 0;
+        }
+
+
+    }
 }

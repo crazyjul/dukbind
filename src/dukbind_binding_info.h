@@ -47,6 +47,11 @@ namespace dukbind
             const duk_c_function method
             );
 
+        duk_c_function GetClassMethod(
+            const size_t class_identifier,
+            const char * method_name
+            ) const;
+
     private:
 
         internal::BindingInfoData
