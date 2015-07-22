@@ -2,6 +2,7 @@
 #include "dukbind_binding_info.h"
 #include "dukbind.h"
 #include "dukbind_assert.h"
+#include "utils/dukbind_identifier.h"
 #include "utils/dukbind_validation.h"
 
 #include <map>
@@ -13,7 +14,7 @@ namespace dukbind
     {
         struct BindingInfoData
         {
-            std::map<std::string,duk_c_function> //:TODO: Replace by custom collection and custom string(internalized)
+            std::map<Identifier,duk_c_function> //:TODO: Replace by custom collection
                 FunctionTable;
         };
     }
@@ -37,7 +38,7 @@ namespace dukbind
         dukbind_assert( name && name[ 0 ], "Function name cannot be empty" );
         dukbind_assert( dukbind::validation::IsValidIdentifier( name ), "Function name should be a valid identifier" );
         dukbind_assert( function, "Function cannot be null" );
-        auto result = Data->FunctionTable.insert( std::make_pair( std::string( name ), function ) );
+        auto result = Data->FunctionTable.insert( std::make_pair( Identifier( name ), function ) );
 
         dukbind_assert( result.second == true, "Function already exists" );
     }
@@ -46,7 +47,7 @@ namespace dukbind
         const char * name
         ) const
     {
-        auto it = Data->FunctionTable.find( name );
+        auto it = Data->FunctionTable.find( Identifier( name ) );
 
         if( it != Data->FunctionTable.end() )
         {

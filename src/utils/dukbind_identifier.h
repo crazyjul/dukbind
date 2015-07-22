@@ -138,5 +138,10 @@ namespace dukbind
     {
         return HashCode != other.HashCode;
     }
+
+    inline bool operator <( const Identifier & first, const Identifier & second )
+    {
+        return first.GetHashCode() < second.GetHashCode();
+    }
 }
 
