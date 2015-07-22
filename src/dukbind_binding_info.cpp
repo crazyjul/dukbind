@@ -16,6 +16,14 @@ namespace dukbind
         {
             std::map<Identifier,duk_c_function> //:TODO: Replace by custom collection
                 FunctionTable;
+            std::map<size_t, std::string>
+                IdToNameTable;
+            std::map<Identifier, size_t>
+                NameToIdTable;
+            std::map<size_t, std::map<Identifier, duk_c_function> >
+                ClassMethodTable;
+            std::map<size_t, duk_c_function>
+                ClassDeleteTable;
         };
     }
 
@@ -55,5 +63,34 @@ namespace dukbind
         }
 
         return 0;
+    }
+
+    void BindingInfo::AddClass(
+        const char * name,
+        const size_t identifier
+        )
+    {
+        dukbind_assert( name && dukbind::validation::IsValidIdentifier( name ), "Class name is not valid" );
+        dukbind_assert( identifier, "Identifier is not valid" );
+        auto result = Data->IdToNameTable.insert( std::make_pair( identifier, std::string( name ) ) );
+        auto result2 = Data->NameToIdTable.insert( std::make_pair( Identifier( name ), identifier ) );
+        Data->ClassMethodTable.insert( std::make_pair( identifier, std::map<Identifier, duk_c_function>() ) );
+
+        dukbind_assert( result.second && result2.second, "Class already registered" );
+    }
+
+    void BindingInfo::AddMethod(
+        const size_t class_identifier,
+        const char * method_name,
+        const duk_c_function method
+        )
+    {
+        dukbind_assert( method != 0, "Method must not be null" );
+        dukbind_assert( method_name && dukbind::validation::IsValidIdentifier( method_name ), "Method name is not valid" );
+        auto function_table = Data->ClassMethodTable.find( class_identifier );
+        dukbind_assert( function_table != Data->ClassMethodTable.end(), "Class not found" );
+
+        auto result = ( *function_table ).second.insert( std::make_pair( Identifier( method_name ), method ) );
+        dukbind_assert( result.second, "Method already exists" );
     }
 }
