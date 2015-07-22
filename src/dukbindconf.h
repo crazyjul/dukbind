@@ -2,7 +2,7 @@
 
 
 #if !defined DUKBIND_DEBUG
-	#ifdef DEBUG
+	#if defined DEBUG || defined _DEBUG
 		#define DUKBIND_DEBUG 1
 	#else
 		#define DUKBIND_DEBUG 0
