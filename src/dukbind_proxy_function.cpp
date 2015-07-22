@@ -3,6 +3,7 @@
 #include "dukbind_proxy_function.h"
 #include "dukbind_binding_info.h"
 #include "dukbind_private.h"
+#include "dukbind_assert.h"
 
 namespace dukbind
 {

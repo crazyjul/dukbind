@@ -1,5 +1,7 @@
 #pragma once
 
+#include <dukbind_assert.h>
+
 namespace dukbind
 {
     namespace debug

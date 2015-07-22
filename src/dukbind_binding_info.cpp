@@ -1,6 +1,7 @@
 #include <duktape.h>
 #include "dukbind_binding_info.h"
 #include "dukbind.h"
+#include "dukbind_assert.h"
 #include "utils/dukbind_validation.h"
 
 #include <map>
