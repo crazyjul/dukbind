@@ -32,11 +32,36 @@ struct dukbind::bind_as_copy<Test>
     static const bool value = true;
 };
 
+static bool DoStuffIsCalled = false;
+
+duk_ret_t DoStuff( duk_context * )
+{
+    DoStuffIsCalled = true;
+    return 0;
+}
+
+duk_ret_t CheckThis( duk_context * ctx )
+{
+
+    duk_push_this( ctx );
+
+    const Test & result = dukbind::Get( ctx, -1, (Test*)0 );
+
+    REQUIRE( result.Data == 5678 );
+
+    return 0;
+}
+
 TEST_CASE( "Class can be passed as copy", "[binding][class]" )
 {
     duk_context * ctx = duk_create_heap_default();
 
     dukbind::BindingInfo info;
+
+    info.AddClass( "Test", dukbind::rtti::GetTypeIndex<Test>() );
+    info.AddMethod( dukbind::rtti::GetTypeIndex<Test>(), "DoStuff", DoStuff );
+    info.AddMethod( dukbind::rtti::GetTypeIndex<Test>(), "CheckThis", CheckThis );
+
     dukbind::Setup( ctx, info, "Module" );
 
     SECTION( "Instance is copied when pushed" )
@@ -68,6 +93,28 @@ TEST_CASE( "Class can be passed as copy", "[binding][class]" )
         duk_gc( ctx, 0 );
         duk_gc( ctx, 0 );
         REQUIRE( Test::DestructorCount == 1 );
+    }
+
+    SECTION( "Binding is called" )
+    {
+        Test data( 1234 );
+        duk_push_global_object( ctx );
+        dukbind::Push( ctx, data );
+        duk_put_prop_string( ctx, -2, "data" );
+
+        duk_eval_string_noresult( ctx, "data.DoStuff()" );
+
+        REQUIRE( DoStuffIsCalled );
+    }
+
+    SECTION( "This is valid" )
+    {
+        Test data( 5678 );
+        duk_push_global_object( ctx );
+        dukbind::Push( ctx, data );
+        duk_put_prop_string( ctx, -2, "data" );
+
+        duk_eval_string_noresult( ctx, "data.CheckThis()" );
     }
 
     duk_destroy_heap( ctx );

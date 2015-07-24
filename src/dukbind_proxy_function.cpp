@@ -88,7 +88,7 @@ namespace dukbind
             const char * name = duk_require_string( ctx, 1 );
             size_t class_identifier;
             finalizer_t finalizer;
-            Get( ctx, 2, class_identifier, finalizer );
+            Get( ctx, 0, class_identifier, finalizer );
 
             dukbind_assert( info, "No binding info" );
 
