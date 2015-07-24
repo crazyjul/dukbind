@@ -24,7 +24,7 @@ namespace dukbind
         struct function_glue<void (*)()>
         {
             template<void (*_Function_)()>
-            static duk_ret_t function( duk_context * ctx )
+            static duk_ret_t function( duk_context * )
             {
                 _Function_();
                 return 0;

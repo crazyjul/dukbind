@@ -2,7 +2,7 @@
 #include <duktape.h>
 #include <dukbind.h>
 
-static duk_ret_t PassTrough( duk_context * ctx )
+static duk_ret_t PassTrough( duk_context * )
 {
     return 1;
 }

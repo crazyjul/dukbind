@@ -59,9 +59,9 @@ namespace dukbind
 
             dukbind_assert( info, "No binding info" );
 
-            duk_c_function function;
+            duk_c_function function = info->GetFunction( name );
 
-            if( ( function = info->GetFunction( name ) ) )
+            if( function )
             {
                 duk_push_c_function( ctx, function, DUK_VARARGS );
                 return 1;
@@ -70,7 +70,7 @@ namespace dukbind
             return 0;
         }
 
-        duk_ret_t BindingHas( duk_context * ctx )
+        duk_ret_t BindingHas( duk_context * )
         {
             return 0;
         }
