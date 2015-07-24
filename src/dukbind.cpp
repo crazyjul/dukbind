@@ -7,6 +7,14 @@
 
 namespace dukbind
 {
+
+    struct Box
+    {
+        void * ObjectPointer;
+        size_t ClassIndex;
+        finalizer_t Finalizer;
+    };
+
     void Push( duk_context * ctx, const char * value )
     {
         duk_push_string( ctx, value );
@@ -80,6 +88,48 @@ namespace dukbind
         return duk_to_number( ctx, index );
     }
 
+    void * Push( duk_context * ctx, const size_t class_index, const size_t object_size, finalizer_t finalizer )
+    {
+        duk_push_global_object( ctx );
+        duk_get_prop_string( ctx, -1, "Proxy" );
+        duk_remove( ctx, -2 );
+
+        duk_push_object( ctx );
+
+        size_t require_size = sizeof( Box ) + object_size;
+
+        Box * box = reinterpret_cast<Box*>( duk_push_fixed_buffer( ctx, require_size ) );
+        box->ClassIndex = class_index;
+        box->ObjectPointer = box + 1;
+        box->Finalizer = finalizer;
+        duk_put_prop_string( ctx, -2, "\xFF" "Box" );
+
+        duk_push_c_function( ctx, &internal::ClassFinalizer, 1 );
+        duk_set_finalizer( ctx, -2 );
+
+        duk_push_heap_stash( ctx );
+        duk_get_prop_string( ctx, -1, "InstanceHandler" );
+        duk_remove( ctx, -2 );
+        duk_new( ctx, 2 );
+
+        return box->ObjectPointer;
+    }
+
+    void * Get( duk_context * ctx, duk_idx_t index, size_t & class_index, finalizer_t & finalizer )
+    {
+        duk_size_t size;
+        duk_get_prop_string( ctx, index, "\xFF" "Box" );
+        dukbind_assert( duk_is_fixed_buffer( ctx, -1 ), "Boxing is always implemented as fixed buffer" );
+        Box * box = reinterpret_cast<Box*>( duk_to_buffer( ctx, -1, &size ) );
+        duk_pop( ctx );
+
+        dukbind_assert( sizeof( Box ) <= size, "Fixed buffer is not a box" );
+
+        class_index = box->ClassIndex;
+        finalizer = box->Finalizer;
+        return box->ObjectPointer;
+    }
+
     void Setup( duk_context * ctx, const BindingInfo & info, const char * module )
     {
         debug::StackMonitor monitor( ctx );
@@ -103,10 +153,10 @@ namespace dukbind
             duk_push_c_function( ctx, internal::BindingHas, 1 );
             duk_put_prop_string( ctx, -2, "has" );
 
-            duk_push_c_function( ctx, internal::BindingSet, 3 );
+            duk_push_c_function( ctx, internal::ForbidSet, 3 );
             duk_put_prop_string( ctx, -2, "set" );
 
-            duk_push_c_function( ctx, internal::BindingDelete, 1 );
+            duk_push_c_function( ctx, internal::ForbidDelete, 1 );
             duk_put_prop_string( ctx, -2, "deleteProperty" );
             duk_new( ctx, 2 );
 
@@ -133,7 +183,26 @@ namespace dukbind
             duk_set_global_object( ctx );
 
             duk_pop( ctx );
-
         }
+
+        duk_push_heap_stash( ctx );
+        duk_push_object( ctx );
+
+        duk_push_c_function( ctx, internal::ClassGet, 2 );
+        duk_put_prop_string( ctx, -2, "get" );
+
+        duk_push_c_function( ctx, internal::ClassHas, 1 );
+        duk_put_prop_string( ctx, -2, "has" );
+
+        duk_push_c_function( ctx, internal::ForbidSet, 3 );
+        duk_put_prop_string( ctx, -2, "set" );
+
+        duk_push_c_function( ctx, internal::ForbidDelete, 1 );
+        duk_put_prop_string( ctx, -2, "deleteProperty" );
+
+        duk_put_prop_string( ctx, -2, "InstanceHandler" );
+
+        duk_pop( ctx );
     }
+
 }

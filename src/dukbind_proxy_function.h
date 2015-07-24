@@ -11,9 +11,16 @@ namespace dukbind
 
         duk_ret_t GlobalsGet( duk_context * ctx );
         duk_ret_t GlobalsHas( duk_context * ctx );
+
         duk_ret_t BindingGet( duk_context * ctx );
         duk_ret_t BindingHas( duk_context * ctx );
-        duk_ret_t BindingSet( duk_context * ctx );
-        duk_ret_t BindingDelete( duk_context * ctx );
+
+        duk_ret_t ClassGet( duk_context * ctx );
+        duk_ret_t ClassHas( duk_context * ctx );
+
+        duk_ret_t ClassFinalizer( duk_context * ctx );
+
+        duk_ret_t ForbidSet( duk_context * ctx );
+        duk_ret_t ForbidDelete( duk_context * ctx );
     }
 }
