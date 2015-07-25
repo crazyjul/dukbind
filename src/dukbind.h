@@ -86,7 +86,7 @@ namespace dukbind
         }
     };
 
-    #define dukbind_bind_as_raw_pointer( _Type_ ) template<> struct dukbind::binding_as_pointer_traits<_Type>: bind_as_raw_pointer<_Type_>{};
+    #define dukbind_bind_as_raw_pointer( _Type_ ) template<> struct dukbind::bind_as_pointer_traits<_Type_>: bind_as_raw_pointer<_Type_>{};
 
     template<typename _Type_>
     void FinalizeObjectPointer( void * object )

@@ -1,7 +1,6 @@
 #include <catch.hpp>
 #include <duktape.h>
 #include <dukbind.h>
-#include <limits>
 
 struct TestPointer
 {
