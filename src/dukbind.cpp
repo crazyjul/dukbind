@@ -88,7 +88,7 @@ namespace dukbind
         return duk_to_number( ctx, index );
     }
 
-    void * Push( duk_context * ctx, const size_t class_index, const size_t object_size, finalizer_t finalizer )
+    static Box * PrivatePush( duk_context * ctx, const size_t class_index, const size_t object_size, finalizer_t finalizer )
     {
         duk_push_global_object( ctx );
         duk_get_prop_string( ctx, -1, "Proxy" );
@@ -99,9 +99,7 @@ namespace dukbind
         size_t require_size = sizeof( Box ) + object_size;
 
         Box * box = reinterpret_cast<Box*>( duk_push_fixed_buffer( ctx, require_size ) );
-        box->ClassIndex = class_index;
-        box->ObjectPointer = box + 1;
-        box->Finalizer = finalizer;
+
         duk_put_prop_string( ctx, -2, "\xFF" "Box" );
 
         duk_push_c_function( ctx, &internal::ClassFinalizer, 1 );
@@ -111,6 +109,26 @@ namespace dukbind
         duk_get_prop_string( ctx, -1, "InstanceHandler" );
         duk_remove( ctx, -2 );
         duk_new( ctx, 2 );
+
+        return box;
+    }
+
+    void * Push( duk_context * ctx, const size_t class_index, const size_t object_size, finalizer_t finalizer )
+    {
+        Box * box = PrivatePush( ctx, class_index, object_size, finalizer );
+        box->ClassIndex = class_index;
+        box->ObjectPointer = box + 1;
+        box->Finalizer = finalizer;
+
+        return box->ObjectPointer;
+    }
+
+    void * Push( duk_context * ctx, const size_t class_index, void * object_pointer, finalizer_t finalizer )
+    {
+        Box * box = PrivatePush( ctx, class_index, 0, finalizer );
+        box->ClassIndex = class_index;
+        box->ObjectPointer = object_pointer;
+        box->Finalizer = finalizer;
 
         return box->ObjectPointer;
     }

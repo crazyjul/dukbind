@@ -75,5 +75,4 @@ TEST_CASE( "Querying class methods works", "[bindings][class]" )
     {
         REQUIRE( info.GetClassMethod( 1234, "SomeMethod2" ) == 0 );
     }
-
 }

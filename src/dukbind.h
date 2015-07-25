@@ -29,6 +29,7 @@ namespace dukbind
     typedef void (* finalizer_t )( void * object );
 
     void * Push( duk_context * ctx, const size_t class_index, const size_t object_size, finalizer_t finalizer );
+    void * Push( duk_context * ctx, const size_t class_index, void * object_pointer, finalizer_t finalizer );
     void * Get( duk_context * ctx, duk_idx_t index, size_t & class_index, finalizer_t & finalizer );
 
     // Binding by copying
@@ -59,6 +60,58 @@ namespace dukbind
         void * object_memory = Get( ctx, index, class_identifier, finalizer );
         dukbind_assert( class_identifier == rtti::GetTypeIndex<_Type_>(), "Parameter is of wrong class" );
 
+        return *reinterpret_cast<_Type_*>( object_memory );
+    }
+
+    // Binding by pointer
+
+    template< typename _Type_ > struct bind_as_pointer_traits;
+
+    template< typename _Type_ > struct bind_as_raw_pointer
+    {
+        static const bool value = true;
+        static void OnPush( _Type_ & )
+        {
+
+        }
+
+        static bool IsValid( _Type_ & )
+        {
+            return true;
+        }
+
+        static void OnFinalize( _Type_ & )
+        {
+
+        }
+    };
+
+    #define dukbind_bind_as_raw_pointer( _Type_ ) template<> struct dukbind::binding_as_pointer_traits<_Type>: bind_as_raw_pointer<_Type_>{};
+
+    template<typename _Type_>
+    void FinalizeObjectPointer( void * object )
+    {
+        bind_as_pointer_traits<_Type_>::OnFinalize( *reinterpret_cast<_Type_*>( object ) );
+    }
+
+    template< typename _Type_ >
+    typename std::enable_if< bind_as_pointer_traits<_Type_>::value >::type Push( duk_context * ctx, _Type_ & type )
+    {
+        Push( ctx, rtti::GetInstanceIndex( type ), &type, &FinalizeObjectPointer<_Type_> );
+
+        bind_as_pointer_traits<_Type_>::OnPush( type );
+    }
+
+    template< typename _Type_ >
+    typename std::enable_if< bind_as_pointer_traits<_Type_>::value, _Type_ & >::type Get( duk_context * ctx, duk_idx_t index, const _Type_ * dummy )
+    {
+        size_t class_identifier;
+        finalizer_t finalizer;
+        void * object_memory = Get( ctx, index, class_identifier, finalizer );
+
+        // Check for base class dukbind_assert( class_identifier == rtti::GetTypeIndex<_Type_>(), "Parameter is of wrong class" );
+
+        dukbind_assert( bind_as_pointer_traits<_Type_>::IsValid( *reinterpret_cast<_Type_*>( object_memory ) ), "Invalid instance" )
         return *reinterpret_cast<_Type_*>( object_memory );
     }
 

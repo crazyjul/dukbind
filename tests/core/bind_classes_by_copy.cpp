@@ -115,3 +115,4 @@ TEST_CASE( "Class can be passed as copy", "[binding][class]" )
 
     duk_destroy_heap( ctx );
 }
+
