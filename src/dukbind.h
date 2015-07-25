@@ -39,22 +39,25 @@ namespace dukbind
         reinterpret_cast<_Type_*>( object )->~_Type_();
     }
 
-    template< typename _Type_ > struct bind_as_copy;
+    template< typename _Type_ > struct bind_as_copy_traits;
+
+    #define dukbind_bind_as_copy( _Type_ ) template<> struct dukbind::bind_as_copy_traits<_Type_>{static const bool value = true;};
 
     template< typename _Type_ >
-    typename std::enable_if< bind_as_copy<_Type_>::value >::type Push( duk_context * ctx, const _Type_ & type )
+    typename std::enable_if< bind_as_copy_traits<_Type_>::value >::type Push( duk_context * ctx, const _Type_ & instance )
     {
+        dukbind_assert( rtti::GetTypeIndex<_Type_>() == rtti::GetInstanceIndex( instance ), "Instance should be of the exact same type" );
         void * object_memory = Push( ctx, rtti::GetTypeIndex<_Type_>(), sizeof( _Type_ ), &FinalizeObjectCopy<_Type_> );
-        new( object_memory ) _Type_( type );
+        new( object_memory ) _Type_( instance );
     }
 
     template< typename _Type_ >
-    typename std::enable_if< bind_as_copy<_Type_>::value, _Type_ & >::type Get( duk_context * ctx, duk_idx_t index, const _Type_ * dummy )
+    typename std::enable_if< bind_as_copy_traits<_Type_>::value, _Type_ & >::type Get( duk_context * ctx, duk_idx_t index, const _Type_ * dummy )
     {
-        size_t class_identifer;
+        size_t class_identifier;
         finalizer_t finalizer;
-        void * object_memory = Get( ctx, index, class_identifer, finalizer );
-        dukbind_assert( class_identifer == rtti::GetTypeIndex<_Type_>(), "Parameter is of wrong class" );
+        void * object_memory = Get( ctx, index, class_identifier, finalizer );
+        dukbind_assert( class_identifier == rtti::GetTypeIndex<_Type_>(), "Parameter is of wrong class" );
 
         return *reinterpret_cast<_Type_*>( object_memory );
     }

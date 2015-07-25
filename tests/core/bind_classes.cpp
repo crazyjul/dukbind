@@ -26,11 +26,7 @@ struct Test
 size_t Test::CopyConstructorCount = 0;
 size_t Test::DestructorCount = 0;
 
-template<>
-struct dukbind::bind_as_copy<Test>
-{
-    static const bool value = true;
-};
+dukbind_bind_as_copy( Test )
 
 static bool DoStuffIsCalled = false;
 
