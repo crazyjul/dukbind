@@ -1,10 +1,16 @@
 #include <catch.hpp>
 #include <duktape.h>
 #include <dukbind.h>
+#include <dukbind_glue.h>
 
 struct TestPointerCustom
 {
     TestPointerCustom( int data ) :Data(data) {}
+
+    int GetData() const{ return Data; }
+
+    void SetData( int data ) { Data = data; }
+
     int Data;
 };
 
@@ -126,6 +132,27 @@ TEST_CASE( "Class can be passed as custom pointer", "[binding][class]" )
         duk_eval_string_noresult( ctx, "data.CheckThis()" );
         IsValidValue = false;
         REQUIRE_THROWS( duk_eval_string_noresult( ctx, "data.CheckThis()" ) );
+    }
+
+    SECTION( "Call object method" )
+    {
+        TestPointerCustom data( 5678 );
+
+        info.AddMethod( dukbind::rtti::GetTypeIndex<TestPointerCustom>(), "GetData", dukbind_GetGlue( TestPointerCustom::GetData ) );
+        info.AddMethod( dukbind::rtti::GetTypeIndex<TestPointerCustom>(), "SetData", dukbind_GetGlue( TestPointerCustom::SetData ) );
+
+        duk_push_global_object( ctx );
+        dukbind::Push( ctx, data );
+        duk_put_prop_string( ctx, -2, "data" );
+
+        IsValidValue = true;
+        duk_eval_string_noresult( ctx, "value = data.GetData();" );
+        duk_get_prop_string( ctx, -1, "value" );
+        REQUIRE( duk_to_number( ctx, -1 ) == 5678 );
+
+        duk_eval_string_noresult( ctx, "data.SetData( 9012 )" );
+
+        REQUIRE( data.Data == 9012 );
     }
 
     duk_destroy_heap( ctx );

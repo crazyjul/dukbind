@@ -52,10 +52,7 @@ TEST_CASE( "Glue functions are working", "[binding][glue]" )
 
     SECTION( "Void function" )
     {
-        info.AddFunction(
-            "Call",
-            &dukbind::glue::function_glue<decltype(&Call)>::function<&Call>
-            );
+        info.AddFunction( "Call", dukbind_GetGlue( Call ) );
 
         dukbind::Setup( ctx, info, "Module" );
         Called = false;
@@ -66,19 +63,9 @@ TEST_CASE( "Glue functions are working", "[binding][glue]" )
 
     SECTION( "Result functions" )
     {
-        info.AddFunction(
-            "GetFloat",
-            &dukbind::glue::function_glue<decltype(&GetFloat)>::function<&GetFloat>
-            );
-        info.AddFunction(
-            "GetInt",
-            &dukbind::glue::function_glue<decltype(&GetInt)>::function<&GetInt>
-            );
-
-        info.AddFunction(
-            "GetText",
-            &dukbind::glue::function_glue<decltype(&GetText)>::function<&GetText>
-            );
+        info.AddFunction( "GetFloat", dukbind_GetGlue( GetFloat ) );
+        info.AddFunction( "GetInt", dukbind_GetGlue( GetInt ) );
+        info.AddFunction( "GetText", dukbind_GetGlue( GetText ) );
 
         dukbind::Setup( ctx, info, "Module" );
         duk_eval_string( ctx, "x = Module.GetFloat(); y = Module.GetInt(); z = Module.GetText()" );
@@ -102,19 +89,9 @@ TEST_CASE( "Glue functions are working", "[binding][glue]" )
 
     SECTION( "Void functions with 1 arg" )
     {
-        info.AddFunction(
-            "SetFloat",
-            &dukbind::glue::function_glue<decltype(&SetFloat)>::function<&SetFloat>
-            );
-        info.AddFunction(
-            "SetInt",
-            &dukbind::glue::function_glue<decltype(&SetInt)>::function<&SetInt>
-            );
-
-        info.AddFunction(
-            "SetText",
-            &dukbind::glue::function_glue<decltype(&SetText)>::function<&SetText>
-            );
+        info.AddFunction( "SetFloat", dukbind_GetGlue( SetFloat ) );
+        info.AddFunction( "SetInt", dukbind_GetGlue( SetInt ) );
+        info.AddFunction( "SetText", dukbind_GetGlue( SetText ) );
 
         dukbind::Setup( ctx, info, "Module" );
         duk_eval_string_noresult( ctx, "Module.SetFloat(1.25); Module.SetInt(1234); Module.SetText('Hello world')" );
@@ -122,10 +99,7 @@ TEST_CASE( "Glue functions are working", "[binding][glue]" )
 
     SECTION( "Result function with 2 arguments")
     {
-        info.AddFunction(
-            "GetMinimum",
-            &dukbind::glue::function_glue<decltype(&GetMinimum)>::function<&GetMinimum>
-            );
+        info.AddFunction( "GetMinimum", dukbind_GetGlue( GetMinimum ) );
 
         dukbind::Setup( ctx, info, "Module" );
         duk_eval_string( ctx, "x = Module.GetMinimum( 1, 2 );" );
