@@ -1,4 +1,4 @@
-#include <duktape.h>
+#include "duktape.h"
 #include "dukbind.h"
 #include "dukbindconf.h"
 #include "dukbind_proxy_function.h"

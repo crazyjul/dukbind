@@ -1,6 +1,6 @@
 #pragma once
 
-#include <dukbind_assert.h>
+#include "dukbind_assert.h"
 
 namespace dukbind
 {

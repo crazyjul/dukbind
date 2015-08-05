@@ -4,10 +4,10 @@
     #error Duktape.h should be included before this header
 #endif
 
-#include <dukbindconf.h>
-#include <dukbind_binding_info.h>
-#include <utils/dukbind_rtti.h>
-#include <dukbind_assert.h>
+#include "dukbindconf.h"
+#include "dukbind_binding_info.h"
+#include "utils/dukbind_rtti.h"
+#include "dukbind_assert.h"
 
 #include <type_traits>
 

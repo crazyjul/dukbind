@@ -1,6 +1,6 @@
 #pragma once
 
-#include <dukbindconf.h>
+#include "dukbindconf.h"
 
 #if DUKBIND_DEBUG
     #include <string>
