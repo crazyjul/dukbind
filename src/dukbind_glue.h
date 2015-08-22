@@ -19,6 +19,19 @@ namespace dukbind
             }
         };
 
+        template<class _Class_, void (_Class_::*_Function_)() >
+        struct function_glue<void (_Class_::*)(), _Function_>
+        {
+            static duk_ret_t function( duk_context * ctx )
+            {
+                duk_push_this( ctx );
+                _Class_ & instance = Get( ctx, -1, (_Class_*)0 );
+                duk_pop( ctx );
+                (instance.*_Function_)();
+                return 0;
+            }
+        };
+
         template<typename _Result_, class _Class_, _Result_ (_Class_::*_Function_)() >
         struct function_glue<_Result_ (_Class_::*)(), _Function_>
         {
