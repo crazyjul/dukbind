@@ -212,7 +212,7 @@ namespace dukbind
         duk_push_c_function( ctx, internal::ClassHas, 1 );
         duk_put_prop_string( ctx, -2, "has" );
 
-        duk_push_c_function( ctx, internal::ForbidSet, 3 );
+        duk_push_c_function( ctx, internal::ClassSet, 3 );
         duk_put_prop_string( ctx, -2, "set" );
 
         duk_push_c_function( ctx, internal::ForbidDelete, 1 );

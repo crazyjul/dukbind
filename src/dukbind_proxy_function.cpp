@@ -120,6 +120,12 @@ namespace dukbind
             return 1;
         }
 
+        duk_ret_t ClassSet( duk_context * ctx )
+        {
+            duk_put_prop( ctx, -3 );
+            return 1;
+        }
+
         duk_ret_t ClassFinalizer( duk_context * ctx )
         {
             size_t class_identifier;

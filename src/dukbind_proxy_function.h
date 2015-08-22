@@ -17,6 +17,7 @@ namespace dukbind
 
         duk_ret_t ClassGet( duk_context * ctx );
         duk_ret_t ClassHas( duk_context * ctx );
+        duk_ret_t ClassSet( duk_context * ctx );
 
         duk_ret_t ClassFinalizer( duk_context * ctx );
 
