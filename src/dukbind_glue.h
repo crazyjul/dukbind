@@ -40,7 +40,7 @@ namespace dukbind
                 duk_push_this( ctx );
                 _Class_ & instance = Get( ctx, -1, (_Class_*)0 );
                 duk_pop( ctx );
-                Push( ctx, instance._Function_() );
+                Push( ctx, (instance.*_Function_)() );
                 return 1;
             }
         };
