@@ -13,12 +13,14 @@
 
 namespace dukbind
 {
+    void Push( duk_context * ctx, const bool value );
     void Push( duk_context * ctx, const char * value );
     void Push( duk_context * ctx, const int value );
     void Push( duk_context * ctx, const float value );
     void Push( duk_context * ctx, const double value );
 
 
+    bool Get( duk_context * ctx, const int index, const bool * );
     const char * Get( duk_context * ctx, const int index, const char ** );
     int Get( duk_context * ctx, const int index, const int * );
     float Get( duk_context * ctx, const int index, const float * );

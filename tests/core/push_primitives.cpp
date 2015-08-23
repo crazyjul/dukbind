@@ -7,6 +7,14 @@ TEST_CASE( "Primitives can be pushed into a context", "[primitives][push]" )
 {
     duk_context * ctx = duk_create_heap_default();
 
+    SECTION( "boolean are pushed" )
+    {
+        dukbind::Push( ctx, true );
+
+        REQUIRE( duk_is_boolean( ctx, -1 ) );
+        REQUIRE( duk_to_boolean( ctx, -1 ) );
+    }
+
     SECTION( "Char strings are pushed" )
     {
         const char * value = "Hello world";

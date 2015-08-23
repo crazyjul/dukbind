@@ -15,6 +15,11 @@ namespace dukbind
         finalizer_t Finalizer;
     };
 
+    void Push( duk_context * ctx, const bool value )
+    {
+        duk_push_boolean( ctx, value );
+    }
+
     void Push( duk_context * ctx, const char * value )
     {
         duk_push_string( ctx, value );
@@ -47,6 +52,12 @@ namespace dukbind
             "Value does not fit into a duk_double_t"
             );
          duk_push_number( ctx, (duk_double_t)value );
+    }
+
+    bool Get( duk_context * ctx, const int index, const bool * )
+    {
+        dukbind_assert( duk_is_boolean( ctx, index ), "No conversion is allowed in Get methods" );
+        return duk_to_boolean( ctx, index );
     }
 
     const char * Get( duk_context * ctx, const int index, const char ** )

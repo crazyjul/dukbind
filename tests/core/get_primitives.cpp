@@ -1,11 +1,24 @@
-#include <catch.hpp>
-#include <duktape.h>
-#include <dukbind.h>
+#include "catch.hpp"
+#include "duktape.h"
+#include "dukbind.h"
 #include <limits>
 
 TEST_CASE( "Primitives can be recovered from a context", "[primitives][get]" )
 {
     duk_context * ctx = duk_create_heap_default();
+
+    SECTION( "Boolean are recovered" )
+    {
+        duk_push_boolean( ctx, true );
+
+        REQUIRE( dukbind::Get( ctx, -1, (const bool*)0 ) );
+
+        duk_push_int( ctx, 1 );
+        REQUIRE_THROWS( dukbind::Get( ctx, -1, (const bool*)0 ) );
+
+        duk_push_object( ctx );
+        REQUIRE_THROWS( dukbind::Get( ctx, -1, (const bool*)0 ) );
+    }
 
     SECTION( "Char strings are recovered" )
     {
