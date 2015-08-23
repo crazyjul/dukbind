@@ -185,6 +185,24 @@ namespace dukbind
             }
         };
 
+        template<typename _Class_, typename _Arg0, typename _Arg1, typename _Arg2,void (_Class_::*_Function_)( _Arg0, _Arg1, _Arg2 ) >
+        struct function_glue<void (_Class_::*)( _Arg0, _Arg1, _Arg2 ),_Function_>
+        {
+            static duk_ret_t function( duk_context * ctx )
+            {
+                duk_push_this( ctx );
+                _Class_ & instance = Get( ctx, -1, (_Class_*)0 );
+                duk_pop( ctx );
+
+                (instance.*_Function_)(
+                    Get( ctx, 0, (typename std::remove_reference<_Arg0>::type *)0 ),
+                    Get( ctx, 1, (typename std::remove_reference<_Arg1>::type *)0 ),
+                    Get( ctx, 2, (typename std::remove_reference<_Arg2>::type *)0 )
+                    );
+                return 0;
+            }
+        };
+
         template<typename _Result_, typename _Arg0, typename _Arg1, typename _Arg2, typename _Arg3,
             _Result_ (*_Function_)( _Arg0, _Arg1, _Arg2, _Arg3 ) >
         struct function_glue<_Result_ (*)( _Arg0, _Arg1, _Arg2, _Arg3 ), _Function_>
