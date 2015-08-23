@@ -1,6 +1,6 @@
-#include <catch.hpp>
-#include <duktape.h>
-#include <dukbind.h>
+#include "catch.hpp"
+#include "duktape.h"
+#include "dukbind.h"
 #include "dukbind_binding_info.h"
 
 static duk_ret_t dummy_function( duk_context * )

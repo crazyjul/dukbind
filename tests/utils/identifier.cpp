@@ -1,5 +1,5 @@
-#include <catch.hpp>
-#include <utils/dukbind_identifier.h>
+#include "catch.hpp"
+#include "utils/dukbind_identifier.h"
 
 TEST_CASE( "Identifier behaves as expected", "[identifier]" )
 {

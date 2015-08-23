@@ -1,6 +1,6 @@
-#include <catch.hpp>
-#include <duktape.h>
-#include <dukbind.h>
+#include "catch.hpp"
+#include "duktape.h"
+#include "dukbind.h"
 
 static duk_ret_t PassTrough( duk_context * )
 {

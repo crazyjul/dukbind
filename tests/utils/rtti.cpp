@@ -1,5 +1,5 @@
-#include <catch.hpp>
-#include <utils/dukbind_rtti.h>
+#include "catch.hpp"
+#include "utils/dukbind_rtti.h"
 
 namespace
 {

@@ -1,7 +1,7 @@
-#include <catch.hpp>
-#include <duktape.h>
-#include <dukbind.h>
-#include <dukbind_glue.h>
+#include "catch.hpp"
+#include "duktape.h"
+#include "dukbind.h"
+#include "dukbind_glue.h"
 
 struct TestPointerCustom
 {

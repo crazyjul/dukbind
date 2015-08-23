@@ -1,6 +1,6 @@
-#include <catch.hpp>
-#include <duktape.h>
-#include <dukbind.h>
+#include "catch.hpp"
+#include "duktape.h"
+#include "dukbind.h"
 #include <limits>
 
 TEST_CASE( "Primitives can be pushed into a context", "[primitives][push]" )

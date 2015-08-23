@@ -1,4 +1,4 @@
-#include <catch.hpp>
+#include "catch.hpp"
 #include "utils/dukbind_validation.h"
 
 TEST_CASE( "Identifier is checked", "[utils][validation]" )
