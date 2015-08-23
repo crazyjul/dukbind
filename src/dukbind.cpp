@@ -110,6 +110,8 @@ namespace dukbind
         size_t require_size = sizeof( Box ) + object_size;
 
         Box * box = reinterpret_cast<Box*>( duk_push_fixed_buffer( ctx, require_size ) );
+        box->ClassIndex = class_index;
+        box->Finalizer = finalizer;
 
         duk_put_prop_string( ctx, -2, "\xFF" "Box" );
 
@@ -127,9 +129,7 @@ namespace dukbind
     void * Push( duk_context * ctx, const size_t class_index, const size_t object_size, finalizer_t finalizer )
     {
         Box * box = PrivatePush( ctx, class_index, object_size, finalizer );
-        box->ClassIndex = class_index;
         box->ObjectPointer = box + 1;
-        box->Finalizer = finalizer;
 
         return box->ObjectPointer;
     }
@@ -137,9 +137,7 @@ namespace dukbind
     void * Push( duk_context * ctx, const size_t class_index, void * object_pointer, finalizer_t finalizer )
     {
         Box * box = PrivatePush( ctx, class_index, 0, finalizer );
-        box->ClassIndex = class_index;
         box->ObjectPointer = object_pointer;
-        box->Finalizer = finalizer;
 
         return box->ObjectPointer;
     }
