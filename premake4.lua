@@ -66,9 +66,11 @@ project "Test"
 	configuration "vs2005"
 		defines	{"_CRT_SECURE_NO_DEPRECATE" }
 
+	configuration "linux" or "macosx"
+		buildoptions { "--std=c++11" }
+
 
 if _ACTION == "clean" then
 	os.rmdir("lib")
 	os.rmdir("tests/bin")
 end
-

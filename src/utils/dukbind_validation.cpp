@@ -5,7 +5,7 @@ namespace dukbind
 {
     namespace validation
     {
-        static std::regex identifer_regex( "[_a-zA-Z$][_a-zA-Z$0-9]*" );
+        static std::regex identifer_regex( "[a-zA-Z$_][a-zA-Z0-9$_]*" );
 
         bool IsValidIdentifier( const char * identifier )
         {

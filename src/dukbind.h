@@ -44,7 +44,7 @@ namespace dukbind
 
     template< typename _Type_ > struct bind_as_copy_traits;
 
-    #define dukbind_bind_as_copy( _Type_ ) template<> struct dukbind::bind_as_copy_traits<_Type_>{static const bool value = true;};
+    #define dukbind_bind_as_copy( _Type_ ) namespace dukbind { template<> struct bind_as_copy_traits<_Type_>{static const bool value = true;}; }
 
     template< typename _Type_ >
     typename std::enable_if< bind_as_copy_traits<_Type_>::value >::type Push( duk_context * ctx, const _Type_ & instance )
@@ -88,7 +88,7 @@ namespace dukbind
         }
     };
 
-    #define dukbind_bind_as_raw_pointer( _Type_ ) template<> struct dukbind::bind_as_pointer_traits<_Type_>: bind_as_raw_pointer<_Type_>{};
+    #define dukbind_bind_as_raw_pointer( _Type_ ) namespace dukbind { template<> struct bind_as_pointer_traits<_Type_>: bind_as_raw_pointer<_Type_>{}; }
 
     template<typename _Type_>
     void FinalizeObjectPointer( void * object )
