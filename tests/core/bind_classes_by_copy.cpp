@@ -63,7 +63,7 @@ TEST_CASE( "Class can be passed as copy", "[binding][class]" )
     {
         Test data( 1234 );
         Test::CopyConstructorCount = 0;
-        dukbind::Push( ctx, data );
+        dukbind::Push( ctx, data, (Test*)0 );
         REQUIRE( Test::CopyConstructorCount == 1 );
     }
 
@@ -71,7 +71,7 @@ TEST_CASE( "Class can be passed as copy", "[binding][class]" )
     {
         Test data( 5678 );
 
-        dukbind::Push( ctx, data );
+        dukbind::Push( ctx, data, (Test*)0 );
 
         const Test & result = dukbind::Get( ctx, -1, (Test*)0 );
 
@@ -81,7 +81,7 @@ TEST_CASE( "Class can be passed as copy", "[binding][class]" )
     SECTION( "Instance is destructed when garbage collected" )
     {
         Test data( 1234 );
-        dukbind::Push( ctx, data );
+        dukbind::Push( ctx, data, (Test*)0 );
         Test::DestructorCount = 0;
 
         duk_pop( ctx );
@@ -94,7 +94,7 @@ TEST_CASE( "Class can be passed as copy", "[binding][class]" )
     {
         Test data( 1234 );
         duk_push_global_object( ctx );
-        dukbind::Push( ctx, data );
+        dukbind::Push( ctx, data, (Test*)0 );
         duk_put_prop_string( ctx, -2, "data" );
 
         duk_eval_string_noresult( ctx, "data.DoStuff()" );
@@ -106,7 +106,7 @@ TEST_CASE( "Class can be passed as copy", "[binding][class]" )
     {
         Test data( 5678 );
         duk_push_global_object( ctx );
-        dukbind::Push( ctx, data );
+        dukbind::Push( ctx, data, (Test*)0 );
         duk_put_prop_string( ctx, -2, "data" );
 
         duk_eval_string_noresult( ctx, "data.CheckThis()" );

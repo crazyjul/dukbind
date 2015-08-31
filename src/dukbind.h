@@ -13,11 +13,11 @@
 
 namespace dukbind
 {
-    void Push( duk_context * ctx, const bool value );
-    void Push( duk_context * ctx, const char * value );
-    void Push( duk_context * ctx, const int value );
-    void Push( duk_context * ctx, const float value );
-    void Push( duk_context * ctx, const double value );
+    void Push( duk_context * ctx, const bool value, const bool * );
+    void Push( duk_context * ctx, const char * value, const char ** );
+    void Push( duk_context * ctx, const int value, const int * );
+    void Push( duk_context * ctx, const float value, const float * );
+    void Push( duk_context * ctx, const double value, const double * );
 
 
     bool Get( duk_context * ctx, const int index, const bool * );
@@ -47,7 +47,7 @@ namespace dukbind
     #define dukbind_bind_as_copy( _Type_ ) template<> struct dukbind::bind_as_copy_traits<_Type_>{static const bool value = true;};
 
     template< typename _Type_ >
-    typename std::enable_if< bind_as_copy_traits<_Type_>::value >::type Push( duk_context * ctx, const _Type_ & instance )
+    typename std::enable_if< bind_as_copy_traits<_Type_>::value >::type Push( duk_context * ctx, const _Type_ & instance, const _Type_ * )
     {
         dukbind_assert( rtti::GetTypeIndex<_Type_>() == rtti::GetInstanceIndex( instance ), "Instance should be of the exact same type" );
         void * object_memory = Push( ctx, rtti::GetTypeIndex<_Type_>(), sizeof( _Type_ ), &FinalizeObjectCopy<_Type_> );
@@ -55,7 +55,7 @@ namespace dukbind
     }
 
     template< typename _Type_ >
-    typename std::enable_if< bind_as_copy_traits<_Type_>::value, _Type_ & >::type Get( duk_context * ctx, duk_idx_t index, const _Type_ * dummy )
+    typename std::enable_if< bind_as_copy_traits<_Type_>::value, _Type_ & >::type Get( duk_context * ctx, duk_idx_t index, const _Type_ * )
     {
         size_t class_identifier;
         finalizer_t finalizer;
@@ -97,7 +97,7 @@ namespace dukbind
     }
 
     template< typename _Type_ >
-    typename std::enable_if< bind_as_pointer_traits<_Type_>::value >::type Push( duk_context * ctx, _Type_ & type )
+    typename std::enable_if< bind_as_pointer_traits<_Type_>::value >::type Push( duk_context * ctx, _Type_ & type, const _Type_ * )
     {
         Push( ctx, rtti::GetInstanceIndex( type ), &type, &FinalizeObjectPointer<_Type_> );
 
@@ -105,7 +105,7 @@ namespace dukbind
     }
 
     template< typename _Type_ >
-    typename std::enable_if< bind_as_pointer_traits<_Type_>::value, _Type_ & >::type Get( duk_context * ctx, duk_idx_t index, const _Type_ * dummy )
+    typename std::enable_if< bind_as_pointer_traits<_Type_>::value, _Type_ & >::type Get( duk_context * ctx, duk_idx_t index, const _Type_ * )
     {
         size_t class_identifier;
         finalizer_t finalizer;

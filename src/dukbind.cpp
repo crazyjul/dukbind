@@ -15,17 +15,17 @@ namespace dukbind
         finalizer_t Finalizer;
     };
 
-    void Push( duk_context * ctx, const bool value )
+    void Push( duk_context * ctx, const bool value, const bool* )
     {
         duk_push_boolean( ctx, value );
     }
 
-    void Push( duk_context * ctx, const char * value )
+    void Push( duk_context * ctx, const char * value, const char ** )
     {
         duk_push_string( ctx, value );
     }
 
-    void Push( duk_context * ctx, const int value )
+    void Push( duk_context * ctx, const int value, const int * )
     {
         dukbind_assert(
             ( (int)(duk_double_t) value ) == value,
@@ -35,7 +35,7 @@ namespace dukbind
         duk_push_number( ctx, (duk_double_t)value );
     }
 
-    void Push( duk_context * ctx, const float value )
+    void Push( duk_context * ctx, const float value, const float * )
     {
         dukbind_assert(
             ( (float)(duk_double_t) value ) == value,
@@ -45,7 +45,7 @@ namespace dukbind
          duk_push_number( ctx, (duk_double_t)value );
     }
 
-    void Push( duk_context * ctx, const double value )
+    void Push( duk_context * ctx, const double value, const double * )
     {
         dukbind_assert(
             ( (double)(duk_double_t) value ) == value,
