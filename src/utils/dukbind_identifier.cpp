@@ -1,6 +1,7 @@
 #include "dukbindconf.h"
 #include "dukbind_identifier.h"
 #include "dukbind_assert.h"
+#include <algorithm>
 
 #if DUKBIND_DEBUG
     #include <deque>
@@ -89,4 +90,3 @@ namespace dukbind
         #endif
     }
 }
-

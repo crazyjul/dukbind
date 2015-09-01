@@ -19,25 +19,27 @@ static bool IsValidCalled = false;
 static bool IsValidValue = true;
 static bool OnFinalizeCalled = false;
 
-template<> struct dukbind::bind_as_pointer_traits<TestPointerCustom>
-{
-    static const bool value = true;
-    static void OnPush( TestPointerCustom & )
-    {
-        OnPushCalled = true;
-    }
+namespace dukbind {
+  template<> struct bind_as_pointer_traits<TestPointerCustom>
+  {
+      static const bool value = true;
+      static void OnPush( TestPointerCustom & )
+      {
+          OnPushCalled = true;
+      }
 
-    static bool IsValid( TestPointerCustom & )
-    {
-        IsValidCalled = true;
-        return IsValidValue;
-    }
+      static bool IsValid( TestPointerCustom & )
+      {
+          IsValidCalled = true;
+          return IsValidValue;
+      }
 
-    static void OnFinalize( TestPointerCustom & )
-    {
-        OnFinalizeCalled = true;
-    }
-};
+      static void OnFinalize( TestPointerCustom & )
+      {
+          OnFinalizeCalled = true;
+      }
+  };
+}
 
 static bool DoStuffIsCalled = false;
 
@@ -157,4 +159,3 @@ TEST_CASE( "Class can be passed as custom pointer", "[binding][class]" )
 
     duk_destroy_heap( ctx );
 }
-

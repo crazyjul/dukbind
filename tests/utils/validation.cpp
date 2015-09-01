@@ -4,6 +4,7 @@
 TEST_CASE( "Identifier is checked", "[utils][validation]" )
 {
     REQUIRE( dukbind::validation::IsValidIdentifier( "a" ) );
+    REQUIRE( dukbind::validation::IsValidIdentifier( "b" ) );
     REQUIRE( dukbind::validation::IsValidIdentifier( "A" ) );
     REQUIRE( dukbind::validation::IsValidIdentifier( "$" ) );
     REQUIRE( dukbind::validation::IsValidIdentifier( "_" ) );
