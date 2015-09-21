@@ -62,8 +62,18 @@ namespace dukbind
 
     const char * Get( duk_context * ctx, const int index, const char ** )
     {
-        dukbind_assert( duk_is_string( ctx, index ), "No conversion is allowed in Get methods" );
-        return duk_to_string( ctx, index );
+        dukbind_assert(
+            duk_is_null_or_undefined( ctx, index ) ||  duk_is_string( ctx, index ),
+            "No conversion is allowed in Get methods" );
+
+        if( duk_is_null_or_undefined( ctx, index ) )
+        {
+            return 0;
+        }
+        else
+        {
+            return duk_to_string( ctx, index );
+        }
     }
 
     int Get( duk_context * ctx, const int index, const int * )
