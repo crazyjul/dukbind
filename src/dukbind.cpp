@@ -22,7 +22,15 @@ namespace dukbind
 
     void Push( duk_context * ctx, const char * value, const char ** )
     {
-        duk_push_string( ctx, value );
+        if( value )
+        {
+            duk_push_string( ctx, value );
+        }
+        else
+        {
+            duk_push_null( ctx );
+        }
+
     }
 
     void Push( duk_context * ctx, const int value, const int * )
