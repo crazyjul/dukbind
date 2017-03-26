@@ -76,7 +76,7 @@ TEST_CASE( "Class can be passed as custom pointer", "[binding][class]" )
     {
         TestPointerCustom data( 1234 );
         OnPushCalled = false;
-        dukbind::Push( ctx, data, (TestPointerCustom*)0 );
+        dukbind::Push( ctx, data );
         REQUIRE( OnPushCalled == true );
     }
 
@@ -84,7 +84,7 @@ TEST_CASE( "Class can be passed as custom pointer", "[binding][class]" )
     {
         TestPointerCustom data( 5678 );
 
-        dukbind::Push( ctx, data, (TestPointerCustom*)0 );
+        dukbind::Push( ctx, data );
         IsValidValue = true;
         IsValidCalled = false;
         const TestPointerCustom & result = dukbind::Get( ctx, -1, (TestPointerCustom*)0 );
@@ -95,7 +95,7 @@ TEST_CASE( "Class can be passed as custom pointer", "[binding][class]" )
     {
         TestPointerCustom data( 5678 );
 
-        dukbind::Push( ctx, data, (TestPointerCustom*)0 );
+        dukbind::Push( ctx, data );
         IsValidValue = false;
         REQUIRE_THROWS( dukbind::Get( ctx, -1, (TestPointerCustom*)0 ) );
     }
@@ -103,7 +103,7 @@ TEST_CASE( "Class can be passed as custom pointer", "[binding][class]" )
     SECTION( "OnFinalize is called when Instance is garbage collected" )
     {
         TestPointerCustom data( 1234 );
-        dukbind::Push( ctx, data, (TestPointerCustom*)0 );
+        dukbind::Push( ctx, data );
 
         duk_pop( ctx );
         duk_gc( ctx, 0 );
@@ -115,7 +115,7 @@ TEST_CASE( "Class can be passed as custom pointer", "[binding][class]" )
     {
         TestPointerCustom data( 1234 );
         duk_push_global_object( ctx );
-        dukbind::Push( ctx, data, (TestPointerCustom*)0 );
+        dukbind::Push( ctx, data );
         duk_put_prop_string( ctx, -2, "data" );
 
         duk_eval_string_noresult( ctx, "data.DoStuff()" );
@@ -127,7 +127,7 @@ TEST_CASE( "Class can be passed as custom pointer", "[binding][class]" )
     {
         TestPointerCustom data( 5678 );
         duk_push_global_object( ctx );
-        dukbind::Push( ctx, data, (TestPointerCustom*)0 );
+        dukbind::Push( ctx, data );
         duk_put_prop_string( ctx, -2, "data" );
 
         IsValidValue = true;
@@ -144,7 +144,7 @@ TEST_CASE( "Class can be passed as custom pointer", "[binding][class]" )
         info.AddMethod( dukbind::rtti::GetTypeIndex<TestPointerCustom>(), "SetData", dukbind_GetGlue( TestPointerCustom::SetData ) );
 
         duk_push_global_object( ctx );
-        dukbind::Push( ctx, data, (TestPointerCustom*)0 );
+        dukbind::Push( ctx, data );
         duk_put_prop_string( ctx, -2, "data" );
 
         IsValidValue = true;

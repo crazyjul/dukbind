@@ -11,8 +11,8 @@ namespace dukbind
         return Get( ctx, index, (const char **)0 );
     }
 
-    void Push( duk_context * ctx, const std::string & value, const std::string * )
+    void Push( duk_context * ctx, const std::string & value )
     {
-        Push( ctx, value.c_str(), (const char **)0 );
+        Push( ctx, value.c_str() );
     }
 }

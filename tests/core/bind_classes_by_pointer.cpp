@@ -62,7 +62,7 @@ TEST_CASE( "Class can be passed as pointer", "[binding][class]" )
     {
         TestPointer data( 1234 );
         TestPointer::CopyConstructorCount = 0;
-        dukbind::Push( ctx, data, (TestPointer*)0 );
+        dukbind::Push( ctx, data );
         REQUIRE( TestPointer::CopyConstructorCount == 0 );
     }
 
@@ -70,7 +70,7 @@ TEST_CASE( "Class can be passed as pointer", "[binding][class]" )
     {
         TestPointer data( 5678 );
 
-        dukbind::Push( ctx, data, (TestPointer*)0 );
+        dukbind::Push( ctx, data );
 
         const TestPointer & result = dukbind::Get( ctx, -1, (TestPointer*)0 );
 
@@ -80,7 +80,7 @@ TEST_CASE( "Class can be passed as pointer", "[binding][class]" )
     SECTION( "Instance is not destructed when garbage collected" )
     {
         TestPointer data( 1234 );
-        dukbind::Push( ctx, data, (TestPointer*)0 );
+        dukbind::Push( ctx, data );
         TestPointer::DestructorCount = 0;
 
         duk_pop( ctx );
@@ -93,7 +93,7 @@ TEST_CASE( "Class can be passed as pointer", "[binding][class]" )
     {
         TestPointer data( 1234 );
         duk_push_global_object( ctx );
-        dukbind::Push( ctx, data, (TestPointer*)0 );
+        dukbind::Push( ctx, data );
         duk_put_prop_string( ctx, -2, "data" );
 
         duk_eval_string_noresult( ctx, "data.DoStuff()" );
@@ -105,7 +105,7 @@ TEST_CASE( "Class can be passed as pointer", "[binding][class]" )
     {
         TestPointer data( 5678 );
         duk_push_global_object( ctx );
-        dukbind::Push( ctx, data, (TestPointer*)0 );
+        dukbind::Push( ctx, data );
         duk_put_prop_string( ctx, -2, "data" );
 
         duk_eval_string_noresult( ctx, "data.CheckThis()" );

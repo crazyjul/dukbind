@@ -13,12 +13,11 @@
 
 namespace dukbind
 {
-    void Push( duk_context * ctx, const bool value, const bool * );
-    void Push( duk_context * ctx, const char * value, const char ** );
-    void Push( duk_context * ctx, const int value, const int * );
-    void Push( duk_context * ctx, const float value, const float * );
-    void Push( duk_context * ctx, const double value, const double * );
-
+    void Push( duk_context * ctx, const bool value );
+    void Push( duk_context * ctx, const char * value );
+    void Push( duk_context * ctx, const int value );
+    void Push( duk_context * ctx, const float value );
+    void Push( duk_context * ctx, const double value );
 
     bool Get( duk_context * ctx, const int index, const bool * );
     const char * Get( duk_context * ctx, const int index, const char ** );
@@ -47,7 +46,7 @@ namespace dukbind
     #define dukbind_bind_as_copy( _Type_ ) namespace dukbind { template<> struct bind_as_copy_traits<_Type_>{static const bool value = true;}; }
 
     template< typename _Type_ >
-    typename std::enable_if< bind_as_copy_traits<_Type_>::value >::type Push( duk_context * ctx, const _Type_ & instance, const _Type_ * )
+    typename std::enable_if< bind_as_copy_traits<_Type_>::value >::type Push( duk_context * ctx, const _Type_ & instance )
     {
         dukbind_assert( rtti::GetTypeIndex<_Type_>() == rtti::GetInstanceIndex( instance ), "Instance should be of the exact same type" );
         void * object_memory = Push( ctx, rtti::GetTypeIndex<_Type_>(), sizeof( _Type_ ), &FinalizeObjectCopy<_Type_> );
@@ -97,7 +96,7 @@ namespace dukbind
     }
 
     template< typename _Type_ >
-    typename std::enable_if< bind_as_pointer_traits<_Type_>::value >::type Push( duk_context * ctx, _Type_ & type, const _Type_ * )
+    typename std::enable_if< bind_as_pointer_traits<_Type_>::value >::type Push( duk_context * ctx, _Type_ & type )
     {
         Push( ctx, rtti::GetInstanceIndex( type ), &type, &FinalizeObjectPointer<_Type_> );
 

@@ -10,7 +10,7 @@
 namespace dukbind
 {
     template< typename _Type_ >
-    void Push( duk_context * ctx, const std::vector<_Type_> & table, const std::vector<_Type_>* )
+    void Push( duk_context * ctx, const std::vector<_Type_> & table )
     {
         size_t index, end = table.size();
         duk_idx_t arr_idx = duk_push_array( ctx );
@@ -22,5 +22,5 @@ namespace dukbind
     }
 
     std::string Get( duk_context * ctx, const int index, const std::string * );
-    void Push( duk_context * ctx, const std::string & value, const std::string * );
+    void Push( duk_context * ctx, const std::string & value );
 }

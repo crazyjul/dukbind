@@ -14,7 +14,7 @@ namespace dukbind
         {
             static duk_ret_t function( duk_context * ctx )
             {
-                Push( ctx, _Function_(), (_Result_*)0 );
+                Push( ctx, _Function_() );
                 return 1;
             }
         };
@@ -40,7 +40,7 @@ namespace dukbind
                 duk_push_this( ctx );
                 _Class_ & instance = Get( ctx, -1, (_Class_*)0 );
                 duk_pop( ctx );
-                Push( ctx, (instance.*_Function_)(), (_Result_*)0 );
+                Push( ctx, (instance.*_Function_)() );
                 return 1;
             }
         };
@@ -53,7 +53,7 @@ namespace dukbind
                 duk_push_this( ctx );
                 _Class_ & instance = Get( ctx, -1, (_Class_*)0 );
                 duk_pop( ctx );
-                Push( ctx, (instance.*_Function_)(), (_Result_*)0 );
+                Push( ctx, (instance.*_Function_)() );
                 return 1;
             }
         };
@@ -76,8 +76,7 @@ namespace dukbind
                 Push( ctx,
                     _Function_(
                         Get( ctx, 0, (typename std::remove_reference<_Arg0>::type *)0 )
-                        ),
-                    (_Result_*)0
+                        )
                     );
                 return 1;
             }
@@ -94,8 +93,7 @@ namespace dukbind
                 Push( ctx,
                     (instance.*_Function_)(
                         Get( ctx, 0, (typename std::remove_reference<_Arg0>::type *)0 )
-                        ),
-                    (_Result_*)0
+                        )
                     );
                 return 1;
             }
@@ -138,8 +136,7 @@ namespace dukbind
                     _Function_(
                         Get( ctx, 0, (typename std::remove_reference<_Arg0>::type *)0 ),
                         Get( ctx, 1, (typename std::remove_reference<_Arg1>::type *)0 )
-                        ),
-                    (_Result_*)0
+                        )
                     );
                 return 1;
             }
