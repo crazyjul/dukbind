@@ -16,7 +16,7 @@ namespace dukbind
         duk_idx_t arr_idx = duk_push_array( ctx );
         for( index = 0; index < end; ++index )
         {
-            Push( ctx, table[ index ], (_Type_*)0 );
+            Push( ctx, table[ index ] );
             duk_put_prop_index( ctx, arr_idx, index );
         }
     }
