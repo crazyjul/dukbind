@@ -46,11 +46,11 @@ namespace dukbind
     #define dukbind_bind_as_copy( _Type_ ) namespace dukbind { template<> struct bind_as_copy_traits<_Type_>{static const bool value = true;}; }
 
     template< typename _Type_ >
-    typename std::enable_if< bind_as_copy_traits<_Type_>::value >::type Push( duk_context * ctx, const _Type_ & instance )
+    typename std::enable_if< bind_as_copy_traits<_Type_>::value >::type Push( duk_context * ctx, _Type_ && instance )
     {
         dukbind_assert( rtti::GetTypeIndex<_Type_>() == rtti::GetInstanceIndex( instance ), "Instance should be of the exact same type" );
         void * object_memory = Push( ctx, rtti::GetTypeIndex<_Type_>(), sizeof( _Type_ ), &FinalizeObjectCopy<_Type_> );
-        new( object_memory ) _Type_( instance );
+        new( object_memory ) _Type_( std::forward<_Type_>( instance ) );
     }
 
     template< typename _Type_ >
